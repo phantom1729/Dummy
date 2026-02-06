@@ -3,338 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Raksha - Hardware Ready</title>
+    <meta name="theme-color" content="#0f172a">
+    <title>Raksha - Ultimate Shield</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --primary-red: #ef4444;
+            --neon-blue: #3b82f6;
+            --neon-green: #10b981;
+            --neon-orange: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Poppins', sans-serif;
             text-align: center;
-            background-color: #ffebee;
-            margin: 0; padding: 15px;
+            background: linear-gradient(135deg, #0f172a 0%, #000000 100%);
+            color: var(--text-main);
+            margin: 0; padding: 20px;
+            min-height: 100vh;
             user-select: none;
             overflow-x: hidden;
-            padding-bottom: 80px;
+            padding-bottom: 100px;
+            box-sizing: border-box;
         }
 
-        h2 { color: #b71c1c; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        h2 { color: var(--text-main); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .branding { font-size: 11px; color: var(--neon-blue); margin-bottom: 25px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.8; }
 
         .btn {
-            width: 100%; padding: 18px; margin: 10px 0;
-            font-size: 18px; border: none; border-radius: 12px;
-            color: white; cursor: pointer; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: transform 0.1s;
+            width: 100%; padding: 20px; margin: 12px 0;
+            font-size: 16px; border: none; border-radius: 16px;
+            color: white; cursor: pointer; font-weight: 600;
+            position: relative; overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
         }
-        .btn:active { transform: scale(0.96); }
-
-        .btn-green { background: linear-gradient(135deg, #2e7d32, #66bb6a); }
-        .btn-blue { background: linear-gradient(135deg, #1565c0, #42a5f5); }
-        .btn-orange { background: linear-gradient(135deg, #ef6c00, #ff9800); border: 2px solid #ffcc80; }
-        .guard-active { background: #333; color: #ff9800; animation: breathe 2s infinite; }
         
+        .btn:active { transform: scale(0.97); }
+        .btn-green { background: linear-gradient(135deg, #10b981, #059669); }
+        .btn-blue { background: linear-gradient(135deg, #3b82f6, #1e40af); }
+        .btn-orange { background: linear-gradient(135deg, #f59e0b, #b45309); }
         .btn-red { 
-            background: linear-gradient(135deg, #c62828, #ff5252);
-            height: 130px; font-size: 26px;
-            border: 4px solid #ffcdd2;
-            animation: pulse 1.5s infinite;
-            margin-top: 15px;
+            background: linear-gradient(135deg, #dc2626, #7f1d1d);
+            height: 120px; font-size: 22px;
+            animation: pulse-red 2s infinite;
         }
 
-        .btn-secret { background: #546e7a; margin-top: 40px; font-size: 16px; }
-        @keyframes pulse { 0% { box-shadow: 0 0 10px #c62828; } 50% { box-shadow: 0 0 25px #c62828; } 100% { box-shadow: 0 0 10px #c62828; } }
-        @keyframes breathe { 0% { border-color: #ff9800; } 50% { border-color: white; } 100% { border-color: #ff9800; } }
-
-        #secretModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 20000; overflow-y: scroll; }
-        
-        /* POCKET MODE OVERLAY */
-        #pocketOverlay { 
-            display: none; position: fixed; top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: black; z-index: 99999; 
-            color: #333; display: flex; align-items: center; justify-content: center;
-            flex-direction: column;
+        .guard-active { 
+            background: #000 !important; color: var(--neon-orange) !important; 
+            border: 2px solid var(--neon-orange);
+            animation: breathe 1.5s infinite ease-in-out; 
         }
 
-        #status { font-weight: bold; margin-top: 10px; color: #555; font-size: 14px; }
-        #locCounter { font-size: 12px; color: #d32f2f; margin-top: 5px; display:none; }
-
-        #widgetButton {
-            position: fixed; bottom: 20px; right: 20px; width: 65px; height: 65px;
-            background: linear-gradient(135deg, #1a237e, #3949ab); color: white; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 35px; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4); z-index: 10002; border: 2px solid white;
-            animation: float 3s ease-in-out infinite;
+        .id-box {
+            margin-top: 35px; padding: 20px; 
+            background: rgba(30, 41, 59, 0.7); 
+            border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); 
+            text-align: left;
         }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        .id-input {
+            width: 100%; padding: 12px; margin-bottom: 12px; 
+            background: rgba(0,0,0,0.3); border: 1px solid #475569; 
+            border-radius: 8px; color: white; box-sizing: border-box;
+        }
+
+        #stealthOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 99999; }
+        #voiceWave { display: none; justify-content: center; gap: 5px; height: 30px; margin-top: 15px; }
+        .bar { width: 5px; background: var(--neon-blue); animation: wave 0.5s infinite alternate; }
+
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
+        @keyframes breathe { 0% { box-shadow: 0 0 15px var(--neon-orange); } 100% { box-shadow: 0 0 30px var(--neon-orange); } }
+        @keyframes wave { from { transform: scaleY(0.5); } to { transform: scaleY(1.5); } }
+        .sub-text { font-size: 12px; opacity: 0.8; margin-top: 4px; }
     </style>
 </head>
 
 <body>
 
-    <h2>🛡️ Raksha Live</h2>
+    <h2>🛡️ Raksha Elite</h2>
+    <div class="branding">Created By Aryan</div>
 
-    <button id="guardBtn" class="btn btn-orange" onclick="toggleScreamGuard()">
-        🔊 Activate Scream Guard
-        <br><span style="font-size:12px; font-weight:normal;">(Pocket Mode + BT Remote)</span>
+    <button id="guardBtn" class="btn btn-orange" onclick="toggleGuard()">
+        <div>🔊 Activate Voice Guard</div>
+        <span id="voiceStatus" class="sub-text">(Listening for 'Help Help')</span>
     </button>
 
-    <button class="btn btn-green" onclick="manualLocation()">📍 Share Location</button>
-    
-    <a href="tel:+918409681110" style="text-decoration:none;">
-        <button class="btn btn-blue">📞 Call Papa</button>
-    </a>
-
-    <hr style="opacity:0.3; margin: 15px 0;">
-
-    <button class="btn btn-red" onclick="startEmergency()">
-        🆘 SOS VIDEO (BACK CAM)
-        <br><span style="font-size:14px; font-weight:normal;">(Continuous Tracking)</span>
-    </button>
-
-    <p id="status">System Ready</p>
-    <p id="locCounter">Updates Sent: 0</p>
-
-    <button class="btn btn-secret" onclick="openSecretMode()">
-        📚 Class 12 Biology Notes (IMP)
-    </button>
-
-    <div id="widgetButton" onclick="openAIWindow()">🤖</div>
-
-    <div id="pocketOverlay" style="display:none;" onclick="exitPocketMode()">
-        <p style="color:#222; font-size:12px;">App is Active & Listening...</p>
-        <p style="color:#222; font-size:10px;">Double Tap to Wake</p>
+    <div id="voiceWave">
+        <div class="bar"></div><div class="bar" style="animation-delay:0.1s"></div><div class="bar" style="animation-delay:0.2s"></div>
     </div>
 
-    <div id="stealthOverlay" onclick="stopEmergency()"></div>
+    <button class="btn btn-green" onclick="manualLocation()">📍 Share Live Location</button>
+    <button class="btn btn-blue" onclick="makeCall()">📞 Call Papa Immediately</button>
+
+    <button class="btn btn-red" onclick="startEmergency('Manual')">🆘 EMERGENCY SOS</button>
+
+    <div class="id-box">
+        <label style="font-size:12px; color:var(--text-muted);">Telegram Chat ID:</label>
+        <input type="number" id="userChatId" class="id-input" placeholder="Enter Chat ID">
+        <label style="font-size:12px; color:var(--text-muted);">Emergency Number:</label>
+        <input type="tel" id="userPhone" class="id-input" placeholder="e.g. +918409681110">
+        <button onclick="saveSettings()" style="width:100%; padding:12px; background:white; color:black; border-radius:8px; font-weight:bold; border:none;">Save Settings</button>
+    </div>
+
+    <div id="stealthOverlay" onclick="handleStealthTap()"></div>
     <video id="hiddenVideo" autoplay playsinline muted style="display:none;"></video>
 
-    <div id="secretModal">
-        <div style="padding:20px; text-align:left;">
-            <div id="fakeLogin">
-                <h2 style="color:#333; text-align:center;">🔒 Restricted Access</h2>
-                <input type="password" id="secretPass" placeholder="Enter PIN" style="width:100%; padding:15px; font-size:18px; margin-bottom:10px; border:1px solid #ccc; border-radius:10px; box-sizing: border-box;">
-                <button class="btn btn-blue" onclick="checkSecretPass()">Unlock Notes</button>
-                <button class="btn" onclick="closeSecretMode()" style="background:#ccc; color:#000;">Close</button>
-            </div>
-            <div id="realHelp" style="display:none;">
-                <h1 style="color:#d32f2f; text-align: center;">🤫 Silent Help Zone</h1>
-                <p style="background:#ffebee; padding:15px; border-left:5px solid red; border-radius: 5px;">
-                    <b>Don't Panic!</b> Secret safe space.
-                </p>
-                <h3>1. Stop Viral Photos</h3>
-                <a href="https://stopncii.org/" target="_blank" style="text-decoration:none;">
-                    <button class="btn btn-green">🛑 Block Images Globally</button>
-                </a>
-                <h3>2. Report Blackmail</h3>
-                <button class="btn btn-blue" onclick="window.open('https://help.instagram.com/contact/383679321740945')">Report to Instagram</button>
-                <button class="btn btn-blue" onclick="window.open('https://cybercrime.gov.in/Webform/Crime_Authen.aspx')">Cyber Crime</button>
-                <br><br>
-                <button class="btn" onclick="closeSecretMode()" style="background:#333;">❌ Close</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // --- 🔒 CONFIG ---
         const BOT_TOKEN = "8378037937:AAGjuFdZWLnf0kFfTG_QIFCslgvrDMb-sC4";
-        const CHAT_ID = "8508792403"; 
-        // ----------------
+        let isGuardActive = false, emergencyActive = false, tapCount = 0, recognition;
 
-        let mediaRecorder;
-        let recordedChunks = [];
-        let tapCount = 0;
-        let emergencyActive = false;
-        let audioContext, analyser, microphone, javascriptNode, isGuardActive = false;
-        let locInterval;
-        let locCount = 0;
-        let wakeLock = null;
+        window.onload = () => {
+            document.getElementById("userChatId").value = localStorage.getItem("raksha_chat_id") || "8508792403";
+            document.getElementById("userPhone").value = localStorage.getItem("raksha_phone") || "+918409681110";
+        };
 
-        // --- 🔘 HARDWARE BUTTON LISTENER (NEW) ---
-        window.addEventListener('keydown', function(event) {
-            // Bluetooth Remotes usually send 'VolumeUp', 'Enter' or 'MediaTrackNext'
-            if (['VolumeUp', 'AudioVolumeUp', 'Enter', 'MediaTrackNext'].includes(event.key)) {
-                if (!emergencyActive) {
-                    // Check if Guard Mode is ON (App is active)
-                    if(isGuardActive || document.visibilityState === 'visible') {
-                        document.getElementById("status").innerText = "Hardware Button Detected!";
-                        startEmergency();
-                    }
+        function saveSettings() {
+            localStorage.setItem("raksha_chat_id", document.getElementById("userChatId").value);
+            localStorage.setItem("raksha_phone", document.getElementById("userPhone").value);
+            alert("Settings Saved! ✅");
+        }
+
+        const getConf = () => ({ id: localStorage.getItem("raksha_chat_id") || "8508792403", phone: localStorage.getItem("raksha_phone") || "+918409681110" });
+
+        function makeCall() { window.location.href = "tel:" + getConf().phone; }
+
+        // --- VOICE ACTIVATION LOGIC ---
+        function startVoiceRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) { alert("Voice not supported on this browser."); return; }
+
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                document.getElementById("voiceStatus").innerText = "🎙️ MONITORING: Say 'Help Help'";
+                document.getElementById("voiceWave").style.display = "flex";
+            };
+
+            recognition.onresult = (event) => {
+                const text = event.results[event.results.length - 1][0].transcript.toLowerCase();
+                console.log("Heard:", text);
+                if (text.includes("help help") || text.includes("emergency") || text.includes("bachao")) {
+                    startEmergency("Voice Command");
                 }
-            }
-        });
+            };
 
-        function openAIWindow() {
-            const url = "https://ultimate-rakshak.vercel.app/";
-            const w = 350; const h = 550;
-            const left = (screen.width/2)-(w/2);
-            const top = (screen.height/2)-(h/2);
-            window.open(url, 'RakshaAI', `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${w}, height=${h}, top=${top}, left=${left}`);
+            recognition.onerror = () => { if(isGuardActive) recognition.start(); };
+            recognition.onend = () => { if(isGuardActive) recognition.start(); };
+            recognition.start();
         }
 
-        async function requestWakeLock() {
-            try { if ('wakeLock' in navigator) { wakeLock = await navigator.wakeLock.request('screen'); } } catch (err) {}
-        }
-        async function releaseWakeLock() { if (wakeLock !== null) { await wakeLock.release(); wakeLock = null; } }
-
-        // --- 1. SCREAM GUARD ---
-        async function toggleScreamGuard() {
-            if (isGuardActive) {
-                if (audioContext) audioContext.close();
-                isGuardActive = false;
-                releaseWakeLock();
-                document.getElementById("pocketOverlay").style.display = "none";
-                document.getElementById("guardBtn").className = "btn btn-orange";
-                document.getElementById("guardBtn").innerHTML = "🔊 Activate Scream Guard<br><span style='font-size:12px'>(Pocket Mode + BT Remote)</span>";
-                document.getElementById("status").innerText = "Guard Mode OFF";
-            } else {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    analyser = audioContext.createAnalyser();
-                    microphone = audioContext.createMediaStreamSource(stream);
-                    javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
-                    analyser.smoothingTimeConstant = 0.8; analyser.fftSize = 1024;
-                    microphone.connect(analyser); analyser.connect(javascriptNode);
-                    javascriptNode.connect(audioContext.destination);
-                    javascriptNode.onaudioprocess = function() {
-                        var array = new Uint8Array(analyser.frequencyBinCount);
-                        analyser.getByteFrequencyData(array);
-                        var values = 0; var length = array.length;
-                        for (var i = 0; i < length; i++) { values += array[i]; }
-                        var average = values / length;
-                        if (average > 110 && !emergencyActive) { startEmergency(); }
-                    }
-                    isGuardActive = true;
-                    requestWakeLock();
-                    document.getElementById("pocketOverlay").style.display = "flex";
-                    document.getElementById("guardBtn").className = "btn btn-orange guard-active";
-                    document.getElementById("guardBtn").innerHTML = "🛡️ GUARD ACTIVE (Listening...)";
-                    document.getElementById("status").innerText = "Listening for Scream...";
-                } catch (err) { alert("Mic Permission Needed!"); }
-            }
-        }
-        
-        let lastTap = 0;
-        function exitPocketMode() {
-            const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTap;
-            if (tapLength < 500 && tapLength > 0) {
-                document.getElementById("pocketOverlay").style.display = "none";
-            }
-            lastTap = currentTime;
+        async function toggleGuard() {
+            if (isGuardActive) { location.reload(); return; }
+            isGuardActive = true;
+            
+            document.getElementById("guardBtn").classList.add("guard-active");
+            document.getElementById("stealthOverlay").style.display = "block";
+            
+            startVoiceRecognition();
+            
+            // Shake fallback
+            window.ondevicemotion = (e) => {
+                let a = e.accelerationIncludingGravity;
+                if(a && (Math.abs(a.x) + Math.abs(a.y) > 30)) startEmergency("Shake Trigger");
+            };
         }
 
-        // --- 2. EMERGENCY TRIGGER ---
-        async function startEmergency() {
+        async function startEmergency(trigger) {
             if (emergencyActive) return;
             emergencyActive = true;
-            if (isGuardActive && audioContext) { audioContext.close(); isGuardActive = false; }
-            requestWakeLock();
+            const conf = getConf();
             
-            document.getElementById("pocketOverlay").style.display = "none";
-            document.getElementById("status").innerText = "⚠️ SOS ACTIVATED!";
-            document.getElementById("status").style.color = "red";
-            document.getElementById("locCounter").style.display = "block";
+            if(navigator.vibrate) navigator.vibrate([500, 200, 500]);
 
-            forceSendLocation(); 
-            locInterval = setInterval(forceSendLocation, 10000); 
-
-            startVideoRecording();
-
-            setTimeout(() => { window.location.href = "tel:112"; }, 1500);
-
-            setTimeout(() => {
-                document.getElementById("pocketOverlay").style.display = "flex"; 
-                document.getElementById("pocketOverlay").style.background = "black"; 
-                document.getElementById("pocketOverlay").innerHTML = ""; 
-                if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(e=>{});
-            }, 3000);
-        }
-
-        // --- 3. VIDEO RECORDER ---
-        async function startVideoRecording() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    audio: true, 
-                    video: { facingMode: "environment" } 
-                }).catch(() => navigator.mediaDevices.getUserMedia({ audio: true, video: true }));
-
-                document.getElementById("hiddenVideo").srcObject = stream;
+            navigator.geolocation.getCurrentPosition(pos => {
+                const lat = pos.coords.latitude, lon = pos.coords.longitude;
+                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                const msg = `🚨 SOS TRIGGERED! \nMethod: ${trigger}\n📍 ${mapLink}`;
                 
-                let options = { mimeType: 'video/webm;codecs=vp8,opus' };
-                if (!MediaRecorder.isTypeSupported(options.mimeType)) options = { mimeType: 'video/mp4' };
-                if (!MediaRecorder.isTypeSupported(options.mimeType)) options = {};
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${conf.id}&text=${encodeURIComponent(msg)}`);
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation?chat_id=${conf.id}&latitude=${lat}&longitude=${lon}`);
+            });
 
-                mediaRecorder = new MediaRecorder(stream, options);
-                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
-                mediaRecorder.onstop = uploadVideo;
-                
-                mediaRecorder.start();
-                setInterval(() => {
-                    if (mediaRecorder.state === "recording") {
-                        mediaRecorder.stop();
-                        setTimeout(() => { if(emergencyActive) mediaRecorder.start(); }, 100);
-                    }
-                }, 5000); 
-            } catch (err) { alert("Camera Error: " + err.message); }
+            // Start Evidence Recording
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: "environment" } });
+            const recorder = new MediaRecorder(stream);
+            let chunks = [];
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/mp4' });
+                const fd = new FormData();
+                fd.append("chat_id", conf.id);
+                fd.append("video", blob, "evidence.mp4");
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, { method: "POST", body: fd });
+            };
+            recorder.start();
+            setTimeout(() => recorder.stop(), 7000);
         }
 
-        function uploadVideo() {
-            if (!recordedChunks.length) return;
-            const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || "video/webm" });
-            recordedChunks = [];
-            const formData = new FormData();
-            formData.append("chat_id", CHAT_ID);
-            let ext = blob.type.includes("mp4") ? "mp4" : "webm";
-            formData.append("video", blob, `evidence_${Date.now()}.${ext}`);
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, { method: "POST", body: formData }).catch(e=>{});
-        }
-
-        // --- 4. FORCE LOCATION LOOP ---
-        function forceSendLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    const lat = pos.coords.latitude;
-                    const lon = pos.coords.longitude;
-                    locCount++;
-                    document.getElementById("locCounter").innerText = "Updates Sent: " + locCount;
-                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation?chat_id=${CHAT_ID}&latitude=${lat}&longitude=${lon}`).catch(e=>{});
-                    const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
-                    const msg = `🚨 LOC UPDATE #${locCount}\n📍 ${mapLink}`;
-                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`).catch(e=>{});
-                }, error => { console.log("GPS Fail"); }, { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 });
-            }
-        }
-
-        // --- 5. MANUAL LOC ---
-        function manualLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    const link = `http://googleusercontent.com/maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                    window.location.href = `https://wa.me/?text=${encodeURIComponent("My Location: " + link)}`;
-                });
-            }
-        }
-
-        // --- 6. STOP ---
-        function stopEmergency() {
+        function handleStealthTap() {
             tapCount++;
-            if (tapCount >= 4) { location.reload(); }
+            if (tapCount >= 6) location.reload();
+            if (navigator.vibrate) navigator.vibrate(50);
         }
 
-        // --- 7. SECRET MODE ---
-        function openSecretMode() { document.getElementById("secretModal").style.display = "block"; }
-        function closeSecretMode() {
-            document.getElementById("secretModal").style.display = "none";
-            document.getElementById("fakeLogin").style.display = "block";
-            document.getElementById("realHelp").style.display = "none";
-            document.getElementById("secretPass").value = "";
-        }
-        function checkSecretPass() {
-            if(document.getElementById("secretPass").value === "1234") {
-                document.getElementById("fakeLogin").style.display = "none";
-                document.getElementById("realHelp").style.display = "block";
-            } else { alert("Incorrect Password!"); }
+        function manualLocation() {
+            navigator.geolocation.getCurrentPosition(pos => {
+                const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                window.location.href = `https://wa.me/?text=${encodeURIComponent("My Location: " + link)}`;
+            });
         }
     </script>
 </body>
