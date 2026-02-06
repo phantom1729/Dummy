@@ -4,116 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0f172a">
-    <title>Raksha - Ultimate Shield</title>
+    <title>Raksha Elite - Voice Shield</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --primary-red: #ef4444;
-            --neon-blue: #3b82f6;
-            --neon-green: #10b981;
-            --neon-orange: #f59e0b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-dark: #0f172a; --bg-card: #1e293b; --primary-red: #ef4444;
+            --neon-blue: #3b82f6; --neon-green: #10b981; --neon-orange: #f59e0b;
+            --text-main: #f8fafc; --text-muted: #94a3b8;
         }
-
         body {
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
+            font-family: 'Poppins', sans-serif; text-align: center;
             background: linear-gradient(135deg, #0f172a 0%, #000000 100%);
-            color: var(--text-main);
-            margin: 0; padding: 20px;
-            min-height: 100vh;
-            user-select: none;
-            overflow-x: hidden;
-            padding-bottom: 100px;
-            box-sizing: border-box;
+            color: var(--text-main); margin: 0; padding: 20px; min-height: 100vh;
+            user-select: none; overflow-x: hidden; padding-bottom: 100px; box-sizing: border-box;
         }
-
-        h2 { color: var(--text-main); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
-        .branding { font-size: 11px; color: var(--neon-blue); margin-bottom: 25px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.8; }
-
         .btn {
-            width: 100%; padding: 20px; margin: 12px 0;
-            font-size: 16px; border: none; border-radius: 16px;
-            color: white; cursor: pointer; font-weight: 600;
-            position: relative; overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.1);
+            width: 100%; padding: 20px; margin: 12px 0; font-size: 16px; border: none; border-radius: 16px;
+            color: white; cursor: pointer; font-weight: 600; transition: all 0.3s;
             display: flex; align-items: center; justify-content: center; flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        
-        .btn:active { transform: scale(0.97); }
+        .btn-orange { background: linear-gradient(135deg, #f59e0b, #b45309); }
         .btn-green { background: linear-gradient(135deg, #10b981, #059669); }
         .btn-blue { background: linear-gradient(135deg, #3b82f6, #1e40af); }
-        .btn-orange { background: linear-gradient(135deg, #f59e0b, #b45309); }
-        .btn-red { 
-            background: linear-gradient(135deg, #dc2626, #7f1d1d);
-            height: 120px; font-size: 22px;
-            animation: pulse-red 2s infinite;
-        }
-
-        .guard-active { 
-            background: #000 !important; color: var(--neon-orange) !important; 
-            border: 2px solid var(--neon-orange);
-            animation: breathe 1.5s infinite ease-in-out; 
-        }
-
-        .id-box {
-            margin-top: 35px; padding: 20px; 
-            background: rgba(30, 41, 59, 0.7); 
-            border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); 
-            text-align: left;
-        }
-        .id-input {
-            width: 100%; padding: 12px; margin-bottom: 12px; 
-            background: rgba(0,0,0,0.3); border: 1px solid #475569; 
-            border-radius: 8px; color: white; box-sizing: border-box;
-        }
-
+        .btn-red { background: linear-gradient(135deg, #dc2626, #7f1d1d); height: 130px; font-size: 22px; animation: pulse 2s infinite; }
+        .guard-active { background: #000 !important; color: var(--neon-orange) !important; border: 2px solid var(--neon-orange); animation: breathe 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220,38,38,0.7); } 70% { box-shadow: 0 0 0 20px rgba(220,38,38,0); } 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); } }
+        @keyframes breathe { 0%, 100% { box-shadow: 0 0 15px var(--neon-orange); } 50% { box-shadow: 0 0 30px var(--neon-orange); } }
         #stealthOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 99999; }
         #voiceWave { display: none; justify-content: center; gap: 5px; height: 30px; margin-top: 15px; }
         .bar { width: 5px; background: var(--neon-blue); animation: wave 0.5s infinite alternate; }
-
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
-        @keyframes breathe { 0% { box-shadow: 0 0 15px var(--neon-orange); } 100% { box-shadow: 0 0 30px var(--neon-orange); } }
         @keyframes wave { from { transform: scaleY(0.5); } to { transform: scaleY(1.5); } }
-        .sub-text { font-size: 12px; opacity: 0.8; margin-top: 4px; }
+        .id-box { margin-top: 30px; padding: 20px; background: rgba(30, 41, 59, 0.7); border-radius: 16px; text-align: left; }
+        .id-input { width: 100%; padding: 12px; margin-bottom: 12px; background: rgba(0,0,0,0.3); border: 1px solid #475569; border-radius: 8px; color: white; box-sizing: border-box; }
     </style>
 </head>
-
 <body>
 
     <h2>🛡️ Raksha Elite</h2>
-    <div class="branding">Created By Aryan</div>
+    <div class="branding">Voice Activated Shield</div>
 
-    <button id="guardBtn" class="btn btn-orange" onclick="toggleGuard()">
-        <div>🔊 Activate Voice Guard</div>
-        <span id="voiceStatus" class="sub-text">(Listening for 'Help Help')</span>
+    <button id="guardBtn" class="btn btn-orange" onclick="toggleVoiceGuard()">
+        <div>🎙️ Activate Voice Guard</div>
+        <span id="voiceStatus" style="font-size:12px; opacity:0.8;">(Listening for 'Help Help')</span>
     </button>
 
     <div id="voiceWave">
         <div class="bar"></div><div class="bar" style="animation-delay:0.1s"></div><div class="bar" style="animation-delay:0.2s"></div>
     </div>
 
-    <button class="btn btn-green" onclick="manualLocation()">📍 Share Live Location</button>
-    <button class="btn btn-blue" onclick="makeCall()">📞 Call Papa Immediately</button>
-
-    <button class="btn btn-red" onclick="startEmergency('Manual')">🆘 EMERGENCY SOS</button>
+    <button class="btn btn-green" onclick="manualLocation()">📍 Share Location (WhatsApp)</button>
+    <button class="btn btn-blue" onclick="makeCall()">📞 Call Papa</button>
+    <button class="btn btn-red" onclick="startEmergency('Manual')">🆘 SOS EMERGENCY</button>
 
     <div class="id-box">
         <label style="font-size:12px; color:var(--text-muted);">Telegram Chat ID:</label>
         <input type="number" id="userChatId" class="id-input" placeholder="Enter Chat ID">
         <label style="font-size:12px; color:var(--text-muted);">Emergency Number:</label>
-        <input type="tel" id="userPhone" class="id-input" placeholder="e.g. +918409681110">
+        <input type="tel" id="userPhone" class="id-input" placeholder="+91...">
         <button onclick="saveSettings()" style="width:100%; padding:12px; background:white; color:black; border-radius:8px; font-weight:bold; border:none;">Save Settings</button>
     </div>
 
     <div id="stealthOverlay" onclick="handleStealthTap()"></div>
-    <video id="hiddenVideo" autoplay playsinline muted style="display:none;"></video>
 
     <script>
         const BOT_TOKEN = "8378037937:AAGjuFdZWLnf0kFfTG_QIFCslgvrDMb-sC4";
@@ -131,17 +83,17 @@
         }
 
         const getConf = () => ({ id: localStorage.getItem("raksha_chat_id") || "8508792403", phone: localStorage.getItem("raksha_phone") || "+918409681110" });
-
         function makeCall() { window.location.href = "tel:" + getConf().phone; }
 
-        // --- VOICE ACTIVATION LOGIC ---
-        function startVoiceRecognition() {
+        // --- VOICE RECOGNITION SYSTEM ---
+        function initVoice() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) { alert("Voice not supported on this browser."); return; }
+            if (!SpeechRecognition) { alert("Speech not supported in this browser."); return; }
 
             recognition = new SpeechRecognition();
             recognition.continuous = true;
-            recognition.lang = 'en-US';
+            recognition.interimResults = true;
+            recognition.lang = 'en-IN'; // Optimized for Indian accents
 
             recognition.onstart = () => {
                 document.getElementById("voiceStatus").innerText = "🎙️ MONITORING: Say 'Help Help'";
@@ -149,31 +101,35 @@
             };
 
             recognition.onresult = (event) => {
-                const text = event.results[event.results.length - 1][0].transcript.toLowerCase();
-                console.log("Heard:", text);
-                if (text.includes("help help") || text.includes("emergency") || text.includes("bachao")) {
-                    startEmergency("Voice Command");
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    const text = event.results[i][0].transcript.toLowerCase();
+                    console.log("Heard:", text);
+                    if (text.includes("help help") || text.includes("emergency") || text.includes("bachao") || text.includes("police")) {
+                        startEmergency("Voice Trigger");
+                    }
                 }
             };
 
-            recognition.onerror = () => { if(isGuardActive) recognition.start(); };
-            recognition.onend = () => { if(isGuardActive) recognition.start(); };
+            // Restart loop if it cuts out
+            recognition.onerror = () => { if(isGuardActive) try { recognition.start(); } catch(e){} };
+            recognition.onend = () => { if(isGuardActive) try { recognition.start(); } catch(e){} };
+            
             recognition.start();
         }
 
-        async function toggleGuard() {
+        function toggleVoiceGuard() {
             if (isGuardActive) { location.reload(); return; }
-            isGuardActive = true;
             
+            isGuardActive = true;
             document.getElementById("guardBtn").classList.add("guard-active");
             document.getElementById("stealthOverlay").style.display = "block";
             
-            startVoiceRecognition();
+            initVoice();
             
-            // Shake fallback
+            // Shake Fallback
             window.ondevicemotion = (e) => {
                 let a = e.accelerationIncludingGravity;
-                if(a && (Math.abs(a.x) + Math.abs(a.y) > 30)) startEmergency("Shake Trigger");
+                if(a && (Math.abs(a.x) + Math.abs(a.y) > 35)) startEmergency("Shake Trigger");
             };
         }
 
@@ -181,32 +137,28 @@
             if (emergencyActive) return;
             emergencyActive = true;
             const conf = getConf();
-            
             if(navigator.vibrate) navigator.vibrate([500, 200, 500]);
 
             navigator.geolocation.getCurrentPosition(pos => {
                 const lat = pos.coords.latitude, lon = pos.coords.longitude;
-                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
-                const msg = `🚨 SOS TRIGGERED! \nMethod: ${trigger}\n📍 ${mapLink}`;
-                
+                const msg = `🚨 SOS TRIGGERED!\nMethod: ${trigger}\n📍 http://maps.google.com/maps?q=${lat},${lon}`;
                 fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${conf.id}&text=${encodeURIComponent(msg)}`);
                 fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation?chat_id=${conf.id}&latitude=${lat}&longitude=${lon}`);
             });
-
-            // Start Evidence Recording
+            
+            // Record Evidence
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: "environment" } });
             const recorder = new MediaRecorder(stream);
             let chunks = [];
             recorder.ondataavailable = e => chunks.push(e.data);
             recorder.onstop = () => {
-                const blob = new Blob(chunks, { type: 'video/mp4' });
                 const fd = new FormData();
                 fd.append("chat_id", conf.id);
-                fd.append("video", blob, "evidence.mp4");
+                fd.append("video", new Blob(chunks, { type: 'video/mp4' }), "evidence.mp4");
                 fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, { method: "POST", body: fd });
             };
             recorder.start();
-            setTimeout(() => recorder.stop(), 7000);
+            setTimeout(() => recorder.stop(), 8000);
         }
 
         function handleStealthTap() {
@@ -217,7 +169,7 @@
 
         function manualLocation() {
             navigator.geolocation.getCurrentPosition(pos => {
-                const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                const link = `http://maps.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                 window.location.href = `https://wa.me/?text=${encodeURIComponent("My Location: " + link)}`;
             });
         }
