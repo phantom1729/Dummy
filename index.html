@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0f172a">
-    <title>Raksha Elite - Full Pro</title>
+    <title>Raksha Elite - Precision Guard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --bg-dark: #0f172a; --bg-card: #1e293b; --primary-red: #ef4444; --neon-blue: #3b82f6; --neon-orange: #f59e0b; --text-main: #f8fafc; --text-muted: #94a3b8; }
@@ -21,7 +21,6 @@
         .id-input { width: 100%; padding: 12px; margin-bottom: 10px; background: rgba(0,0,0,0.3); border: 1px solid #475569; border-radius: 8px; color: white; box-sizing: border-box; }
         #stealthOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 99999; }
         #journeyUI { display: none; background: rgba(239, 68, 68, 0.2); border: 2px solid var(--primary-red); border-radius: 15px; padding: 10px; margin-bottom: 15px; }
-        #secretModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 20000; color: #333; padding: 20px; box-sizing: border-box; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
         .sub-text { font-size: 11px; opacity: 0.8; font-weight: 300; }
     </style>
@@ -29,59 +28,48 @@
 <body>
 
     <h2>🛡️ Raksha Elite</h2>
-    <div class="branding">Ultimate Shield Pro</div>
+    <div class="branding">1M Precision Guard Armed</div>
 
     <div id="journeyUI">
         <div style="font-size: 10px; color: var(--primary-red); font-weight: bold;">⚠️ JOURNEY TIMER ACTIVE</div>
         <div id="timeLeft" style="font-size: 30px; font-weight: 800;">00:00</div>
-        <div id="targetText" style="font-size: 10px;">Heading to: --</div>
+        <div id="targetText" style="font-size: 10px;">Arriving at: --</div>
     </div>
 
     <button id="guardBtn" class="btn btn-orange" onclick="toggleFullGuard()">
         <div>🔊 All-In-One Guard</div>
-        <span class="sub-text">(Volume / Slap / Scream Enabled)</span>
+        <span class="sub-text">(Scream / Slap / Vol / 1M Geo)</span>
     </button>
-
-    <button class="btn btn-green" onclick="shareLocation()">📍 Share Live Location</button>
-    <button class="btn btn-blue" onclick="makeCall()">📞 Call Papa</button>
 
     <button class="btn btn-red" onclick="startEmergency('Manual SOS')">🆘 EMERGENCY SOS</button>
 
     <div class="id-box">
         <h4 style="margin:0 0 10px 0; color:var(--neon-blue);">⚙️ Safe Zone Setup</h4>
         <input type="number" id="userChatId" class="id-input" placeholder="Telegram Chat ID">
-        <input type="tel" id="userPhone" class="id-input" placeholder="Emergency Phone Number">
+        <input type="tel" id="userPhone" class="id-input" placeholder="Emergency Phone">
         
-        <label style="font-size:11px; color:gray;">Hostel/Home Coordinates:</label>
-        <input type="text" id="hostelLoc" class="id-input" placeholder="e.g. 25.5941, 85.1376">
+        <label style="font-size:10px; color:gray;">Hostel/Home Lat, Lon:</label>
+        <input type="text" id="hostelLoc" class="id-input" placeholder="25.5941, 85.1376">
         
-        <label style="font-size:11px; color:gray;">Coaching Coordinates:</label>
-        <input type="text" id="coachLoc" class="id-input" placeholder="e.g. 25.6121, 85.1587">
+        <label style="font-size:10px; color:gray;">Coaching Lat, Lon:</label>
+        <input type="text" id="coachLoc" class="id-input" placeholder="25.6121, 85.1587">
         
         <input type="number" id="travelMins" class="id-input" placeholder="Travel Time (Minutes)">
         
         <div style="display:flex; gap:10px; margin-top:5px;">
-            <button onclick="startJourney('COACHING')" style="flex:1; padding:12px; background:var(--neon-blue); color:white; border-radius:8px; border:none; font-weight:bold;">Go Coaching</button>
-            <button onclick="startJourney('HOSTEL')" style="flex:1; padding:12px; background:var(--neon-orange); color:white; border-radius:8px; border:none; font-weight:bold;">Go Hostel</button>
+            <button onclick="startJourney('COACHING')" style="flex:1; padding:12px; background:var(--neon-blue); color:white; border-radius:8px; border:none; font-weight:bold;">To Coaching</button>
+            <button onclick="startJourney('HOSTEL')" style="flex:1; padding:12px; background:var(--neon-orange); color:white; border-radius:8px; border:none; font-weight:bold;">To Hostel</button>
         </div>
-        <button onclick="saveAllSettings()" style="width:100%; margin-top:10px; padding:8px; background:gray; color:white; border-radius:8px; border:none; font-size:12px;">Save Configurations</button>
+        <button onclick="saveSettings()" style="width:100%; margin-top:10px; padding:8px; background:gray; color:white; border-radius:8px; border:none;">Save Settings</button>
     </div>
-
-    <button class="btn" style="background:rgba(255,255,255,0.05); color:gray; border-style:dashed;" onclick="openSecretVault()">🔒 Bio Notes Vault</button>
 
     <div id="stealthOverlay" onclick="handleStealthTap()"></div>
-    <div id="secretModal">
-        <h3>🔒 Secure Vault</h3>
-        <input type="password" id="vaultPin" placeholder="Enter PIN" class="id-input" style="color:black; border:1px solid #ccc;">
-        <button class="btn btn-blue" onclick="checkPin()">Unlock Notes</button>
-        <button class="btn" style="background:gray;" onclick="closeVault()">Close</button>
-    </div>
 
     <script>
         const BOT_TOKEN = "8378037937:AAGjuFdZWLnf0kFfTG_QIFCslgvrDMb-sC4";
         let isGuardActive = false, emergencyActive = false, tapCount = 0;
         let lastX = null, lastY = null, lastZ = null;
-        let journeyInt;
+        let journeyInt, locationWatch;
 
         window.onload = function() {
             document.getElementById("userChatId").value = localStorage.getItem("raksha_chat_id") || "8508792403";
@@ -91,114 +79,96 @@
             document.getElementById("travelMins").value = localStorage.getItem("raksha_mins") || "30";
         };
 
-        function saveAllSettings() {
+        function saveSettings() {
             localStorage.setItem("raksha_chat_id", document.getElementById("userChatId").value);
             localStorage.setItem("raksha_phone", document.getElementById("userPhone").value);
             localStorage.setItem("raksha_hostel", document.getElementById("hostelLoc").value);
             localStorage.setItem("raksha_coach", document.getElementById("coachLoc").value);
             localStorage.setItem("raksha_mins", document.getElementById("travelMins").value);
-            alert("Settings Saved! ✅");
+            alert("Safe Zones Saved! ✅");
         }
 
-        // --- SENSORS & TRIGGERS ---
-        window.addEventListener('keydown', (e) => {
-            if (isGuardActive && (e.key === "AudioVolumeUp" || e.keyCode === 175)) startEmergency("Volume Button");
-        });
-
-        function handleMotion(event) {
-            if (!isGuardActive || emergencyActive) return;
-            let acc = event.accelerationIncludingGravity;
-            if (!acc) return;
-            if (lastX === null) { lastX = acc.x; lastY = acc.y; lastZ = acc.z; return; }
-            let delta = Math.abs(lastX - acc.x) + Math.abs(lastY - acc.y) + Math.abs(lastZ - acc.z);
-            if (delta > 38) startEmergency("Pocket Slap/Shake");
-            lastX = acc.x; lastY = acc.y; lastZ = acc.z;
-        }
-
-        async function initScream() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                const audioCtx = new AudioContext();
-                const source = audioCtx.createMediaStreamSource(stream);
-                const analyser = audioCtx.createAnalyser();
-                const processor = audioCtx.createScriptProcessor(2048, 1, 1);
-                source.connect(analyser); analyser.connect(processor); processor.connect(audioCtx.destination);
-                processor.onaudioprocess = () => {
-                    const data = new Uint8Array(analyser.frequencyBinCount);
-                    analyser.getByteFrequencyData(data);
-                    let val = data.reduce((a,b) => a+b) / data.length;
-                    if (val > 55 && !emergencyActive) startEmergency("Scream Detection");
-                };
-            } catch(e) {}
-        }
-
-        async function toggleFullGuard() {
-            if (isGuardActive) { location.reload(); return; }
-            if (typeof DeviceMotionEvent.requestPermission === 'function') await DeviceMotionEvent.requestPermission();
-            
-            isGuardActive = true;
-            document.getElementById("guardBtn").className = "btn btn-orange guard-active";
-            document.getElementById("guardBtn").innerHTML = "🛡️ GUARD ARMED (Listening...)";
-            document.getElementById("stealthOverlay").style.display = "block";
-            window.addEventListener('devicemotion', handleMotion);
-            initScream();
-        }
-
-        // --- JOURNEY TIMER ---
+        // --- 1 METER ACCURACY LOGIC ---
         function startJourney(dest) {
             const mins = parseInt(document.getElementById("travelMins").value);
-            const target = (dest === 'HOSTEL') ? document.getElementById("hostelLoc").value : document.getElementById("coachLoc").value;
+            const targetStr = (dest === 'HOSTEL') ? document.getElementById("hostelLoc").value : document.getElementById("coachLoc").value;
             
-            if(!target) { alert("Coordinates not set for " + dest); return; }
+            if(!targetStr) { alert("Set coordinates for " + dest); return; }
+            const [tLat, tLon] = targetStr.split(',').map(Number);
             
             let sec = mins * 60;
             document.getElementById("journeyUI").style.display = "block";
-            document.getElementById("targetText").innerText = "Heading to: " + dest;
+            document.getElementById("targetText").innerText = "Arriving at: " + dest;
             
             if(journeyInt) clearInterval(journeyInt);
             journeyInt = setInterval(() => {
                 sec--;
                 document.getElementById("timeLeft").innerText = `${Math.floor(sec/60)}:${sec%60 < 10 ? '0' : ''}${sec%60}`;
-                if (sec <= 0) { clearInterval(journeyInt); startEmergency("Timer Expired (Not Reached " + dest + ")"); }
+                if (sec <= 0) { 
+                    stopJourney();
+                    startEmergency("Geo-Timer Expired: Target " + dest + " not reached."); 
+                }
             }, 1000);
-            if(navigator.vibrate) navigator.vibrate(200);
+
+            // High Precision Location Tracking
+            if (locationWatch) navigator.geolocation.clearWatch(locationWatch);
+            locationWatch = navigator.geolocation.watchPosition(pos => {
+                const dist = calculateDistance(pos.coords.latitude, pos.coords.longitude, tLat, tLon);
+                // 0.001 KM = 1 Meter
+                if (dist <= 0.001) {
+                    stopJourney();
+                    alert("Reached " + dest + " Safely! ✅");
+                    if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                }
+            }, null, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
         }
 
-        // --- SOS ACTION ---
+        function stopJourney() {
+            clearInterval(journeyInt);
+            if (locationWatch) navigator.geolocation.clearWatch(locationWatch);
+            document.getElementById("journeyUI").style.display = "none";
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        // --- SENSORS ---
+        window.addEventListener('keydown', (e) => {
+            if (isGuardActive && (e.key === "AudioVolumeUp" || e.keyCode === 175)) startEmergency("Volume Button");
+        });
+
+        async function toggleFullGuard() {
+            if (isGuardActive) { location.reload(); return; }
+            if (typeof DeviceMotionEvent.requestPermission === 'function') await DeviceMotionEvent.requestPermission();
+            isGuardActive = true;
+            document.getElementById("guardBtn").className = "btn btn-orange guard-active";
+            document.getElementById("stealthOverlay").style.display = "block";
+            window.addEventListener('devicemotion', e => {
+                let acc = e.accelerationIncludingGravity;
+                if (!acc) return;
+                let delta = Math.abs(acc.x - (lastX||0)) + Math.abs(acc.y - (lastY||0)) + Math.abs(acc.z - (lastZ||0));
+                if (delta > 40 && !emergencyActive) startEmergency("Pocket Slap/Shock");
+                lastX = acc.x; lastY = acc.y; lastZ = acc.z;
+            });
+        }
+
         async function startEmergency(reason) {
             if (emergencyActive) return;
             emergencyActive = true;
             if(navigator.vibrate) navigator.vibrate([1000, 200, 1000]);
-            
             navigator.geolocation.getCurrentPosition(pos => {
-                const lat = pos.coords.latitude, lon = pos.coords.longitude;
-                const link = `https://www.google.com/maps?q=${lat},${lon}`;
-                const msg = `🚨 SOS TRIGGERED!\nReason: ${reason}\n📍 Location: ${link}`;
-                const cid = localStorage.getItem("raksha_chat_id") || "8508792403";
-                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${cid}&text=${encodeURIComponent(msg)}`);
-                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation?chat_id=${cid}&latitude=${lat}&longitude=${lon}`);
-            }, null, {enableHighAccuracy: true});
-
-            // Secret Video Capture
-            try {
-                const vStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: "environment" } });
-                const rec = new MediaRecorder(vStream); let ch = [];
-                rec.ondataavailable = e => ch.push(e.data);
-                rec.onstop = () => {
-                    const fd = new FormData(); fd.append("chat_id", localStorage.getItem("raksha_chat_id"));
-                    fd.append("video", new Blob(ch, {type:'video/mp4'}), "evidence.mp4");
-                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, {method:"POST", body:fd});
-                };
-                rec.start(); setTimeout(()=>rec.stop(), 9000);
-            } catch(e) {}
+                const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                const msg = `🚨 SOS: ${reason}\n📍 ${link}`;
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${localStorage.getItem("raksha_chat_id") || "8508792403"}&text=${encodeURIComponent(msg)}`);
+            });
         }
 
         function handleStealthTap() { tapCount++; if (tapCount >= 6) location.reload(); }
-        function openSecretVault() { document.getElementById("secretModal").style.display = "block"; }
-        function closeVault() { document.getElementById("secretModal").style.display = "none"; }
-        function checkPin() { if(document.getElementById("vaultPin").value === "1234") alert("Bio: Practice Diagrams for Cell Biology."); else alert("Wrong PIN!"); }
-        function makeCall() { window.location.href = "tel:" + (localStorage.getItem("raksha_phone") || "+918409681110"); }
-        function shareLocation() { navigator.geolocation.getCurrentPosition(p => window.location.href = `https://wa.me/?text=My Live Location: https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`); }
     </script>
 </body>
 </html>
