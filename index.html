@@ -24,11 +24,8 @@
             margin: 0; padding: 20px;
             min-height: 100vh;
             user-select: none;
-            box-sizing: border-box;
         }
 
-        h2 { text-transform: uppercase; letter-spacing: 2px; font-weight: 800; }
-        
         .btn {
             width: 100%; padding: 20px; margin: 12px 0;
             font-size: 16px; border: none; border-radius: 16px;
@@ -38,90 +35,77 @@
         }
         
         .btn-orange { background: linear-gradient(135deg, #f59e0b, #b45309); }
-        .btn-red { background: linear-gradient(135deg, #dc2626, #7f1d1d); height: 130px; animation: pulse 2s infinite; }
+        .btn-red { background: linear-gradient(135deg, #dc2626, #7f1d1d); height: 120px; animation: pulse 2s infinite; }
 
         .guard-active { 
             background: #000 !important; color: var(--neon-orange) !important; 
             border: 2px solid var(--neon-orange);
-            animation: breathe 1.5s infinite ease-in-out; 
+            animation: breathe 1.5s infinite; 
         }
 
         #stealthOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 99999; }
         
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
-        @keyframes breathe { 0% { box-shadow: 0 0 15px var(--neon-orange); } 100% { box-shadow: 0 0 30px var(--neon-orange); } }
+        @keyframes breathe { 0%, 100% { box-shadow: 0 0 15px var(--neon-orange); } 50% { box-shadow: 0 0 30px var(--neon-orange); } }
     </style>
 </head>
-
 <body>
 
     <h2>🛡️ Raksha Elite</h2>
-    <div style="font-size: 11px; color: var(--neon-blue); margin-bottom: 25px;">VOLUME KEY PROTECTION</div>
+    <div style="font-size: 11px; color: var(--neon-blue); margin-bottom: 25px;">VOLUME UP TO ACTIVATE</div>
 
     <button id="guardBtn" class="btn btn-orange" onclick="toggleGuard()">
-        <div>🔊 Activate Volume Guard</div>
-        <span style="font-size:12px; opacity:0.8;">(Rapidly Click Volume Up/Down 4x)</span>
+        <div>🔊 Activate Sound Guard</div>
+        <span style="font-size:12px; opacity:0.8;">(Press Volume Up button to Trigger)</span>
     </button>
 
-    <button class="btn btn-red" onclick="startEmergency('Manual')">🆘 EMERGENCY SOS</button>
+    <button class="btn btn-red" onclick="startEmergency('Manual Click')">🆘 EMERGENCY SOS</button>
 
     <div id="stealthOverlay" onclick="handleStealthTap()"></div>
-    <video id="hiddenVideo" autoplay playsinline muted style="display:none;"></video>
 
     <script>
         const BOT_TOKEN = "8378037937:AAGjuFdZWLnf0kFfTG_QIFCslgvrDMb-sC4";
+        const CHAT_ID = "8508792403";
         let isGuardActive = false, emergencyActive = false, tapCount = 0;
-        let volumePattern = [];
 
-        // --- VOLUME BUTTON DETECTION ---
+        // --- VOLUME UP KEY DETECTION ---
         window.addEventListener('keydown', (e) => {
             if (isGuardActive && !emergencyActive) {
-                // Check if key is VolumeUp or VolumeDown
-                if (e.key === "AudioVolumeUp" || e.key === "AudioVolumeDown" || e.keyCode === 175 || e.keyCode === 174) {
-                    const now = Date.now();
-                    volumePattern.push(now);
-
-                    if (volumePattern.length > 4) volumePattern.shift();
-
-                    if (volumePattern.length === 4) {
-                        const timeDiff = volumePattern[3] - volumePattern[0];
-                        if (timeDiff < 3000) { // 4 clicks within 3 seconds
-                            startEmergency("Volume Button Trigger");
-                            volumePattern = [];
-                        }
-                    }
+                // 'AudioVolumeUp' detect karta hai jab sound badhane wala button dabe
+                if (e.key === "AudioVolumeUp" || e.keyCode === 175) {
+                    startEmergency("Volume Up Button Pressed");
                 }
             }
         });
 
-        async function toggleGuard() {
+        function toggleGuard() {
             if (isGuardActive) { location.reload(); return; }
             isGuardActive = true;
             document.getElementById("guardBtn").classList.add("guard-active");
+            document.getElementById("guardBtn").innerHTML = "<div>🛡️ GUARD ON</div><span style='font-size:12px;'>Press Volume Up for SOS</span>";
             document.getElementById("stealthOverlay").style.display = "block";
             
-            // Vibration to confirm guard is ON
             if(navigator.vibrate) navigator.vibrate(100);
         }
 
-        async function startEmergency(trigger) {
+        async function startEmergency(method) {
             if (emergencyActive) return;
             emergencyActive = true;
-            const cid = localStorage.getItem("raksha_chat_id") || "8508792403";
-            
-            // Confirm SOS started via vibration
-            if(navigator.vibrate) navigator.vibrate([500, 200, 500, 200, 500]);
 
+            // Vibrate pattern to confirm SOS sent
+            if(navigator.vibrate) navigator.vibrate([500, 200, 500]);
+
+            // 1. Send Location
             navigator.geolocation.getCurrentPosition(pos => {
                 const lat = pos.coords.latitude, lon = pos.coords.longitude;
-                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
-                const msg = `🚨 VOLUME SOS TRIGGERED!\n📍 ${mapLink}`;
+                const mapLink = `http://maps.google.com/maps?q=${lat},${lon}`;
+                const msg = `🚨 SOS ACTIVATED!\nMethod: ${method}\n📍 Location: ${mapLink}`;
                 
-                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${cid}&text=${encodeURIComponent(msg)}`);
-                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation?chat_id=${cid}&latitude=${lat}&longitude=${lon}`);
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`);
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation?chat_id=${CHAT_ID}&latitude=${lat}&longitude=${lon}`);
             });
 
-            // Capture 8s of Evidence
+            // 2. Secretly Record Video/Audio for 8 seconds
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { facingMode: "environment" } });
                 const recorder = new MediaRecorder(stream);
@@ -129,13 +113,13 @@
                 recorder.ondataavailable = e => chunks.push(e.data);
                 recorder.onstop = () => {
                     const fd = new FormData();
-                    fd.append("chat_id", cid);
+                    fd.append("chat_id", CHAT_ID);
                     fd.append("video", new Blob(chunks, { type: 'video/mp4' }), "evidence.mp4");
                     fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, { method: "POST", body: fd });
                 };
                 recorder.start();
                 setTimeout(() => recorder.stop(), 8000);
-            } catch (e) {}
+            } catch (e) { console.log("Camera access denied"); }
         }
 
         function handleStealthTap() {
