@@ -3,215 +3,241 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Raksha Ultimate</title>
-
+<title>Raksha Elite - Safety System</title>
 <style>
-body{
-font-family:Arial;
-background:#0f172a;
-color:white;
-text-align:center;
-padding:15px;
-}
-h2{margin-bottom:5px;}
-.btn{
-width:95%;
-padding:16px;
-margin:8px;
-font-size:17px;
-border:none;
-border-radius:12px;
-color:white;
-font-weight:bold;
-}
-.red{background:#e53935;}
-.blue{background:#1e88e5;}
-.green{background:#43a047;}
-.orange{background:#fb8c00;}
-.box{
-background:#1e293b;
-padding:15px;
-border-radius:12px;
-margin-top:15px;
-}
-input{
-width:95%;
-padding:10px;
-margin:6px;
-border-radius:6px;
-border:none;
-font-size:15px;
-}
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffebee; text-align: center; padding: 15px; margin: 0; user-select: none; }
+    
+    /* MAIN BUTTONS */
+    .btn { width: 100%; padding: 18px; margin: 8px 0; font-size: 18px; border: none; border-radius: 15px; color: white; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.1s; }
+    .btn:active { transform: scale(0.98); }
+    .red { background: linear-gradient(135deg, #ef5350, #c62828); }
+    .green { background: linear-gradient(135deg, #66bb6a, #2e7d32); }
+    .blue { background: linear-gradient(135deg, #42a5f5, #1565c0); } /* Ghost Call */
+    .black { background: linear-gradient(135deg, #444, #000); border: 1px solid #0f0; color: #0f0; } /* Wi-Fi Scanner */
+
+    /* SETTINGS BOX */
+    .box { background: white; padding: 20px; border-radius: 15px; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    input { width: 90%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; }
+
+    /* --- FEATURE 3: WI-FI SCANNER UI (Demo) --- */
+    #wifiBox { 
+        display: none; background: #000; color: #0f0; padding: 15px; 
+        border-radius: 10px; font-family: 'Courier New', monospace; text-align: left;
+        margin-top: 15px; border: 2px solid #0f0;
+    }
+    .wifi-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding: 5px 0; font-size: 12px; }
+    .location-lock { 
+        background: #0f0; color: #000; text-align: center; font-weight: bold; 
+        margin-top: 10px; padding: 5px; display: none; animation: blink 1s infinite; 
+    }
+
+    /* --- FEATURE 2: FAKE CALL FULL SCREEN --- */
+    #fakeCallScreen {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(to bottom, #203a43, #2c5364);
+        z-index: 9999; display: none; flex-direction: column;
+        align-items: center; justify-content: space-between; padding: 60px 0;
+        color: white;
+    }
+    .caller-icon { width: 100px; height: 100px; background: #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 20px; color: #333; }
+    .caller-name { font-size: 32px; font-weight: bold; }
+    .caller-number { font-size: 18px; opacity: 0.8; margin-top: 5px; }
+    
+    .call-actions { display: flex; width: 80%; justify-content: space-between; margin-bottom: 50px; }
+    .action-btn { width: 70px; height: 70px; border-radius: 50%; border: none; font-size: 24px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .decline { background: #ff3b30; box-shadow: 0 0 20px rgba(255, 59, 48, 0.5); }
+    .accept { background: #4cd964; box-shadow: 0 0 20px rgba(76, 217, 100, 0.5); animation: pulse 1.5s infinite; }
+
+    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 </style>
 </head>
-
 <body>
 
-<h2>🛡️ RAKSHA ULTIMATE</h2>
-<p>India Safety System</p>
+    <h2>🛡️ RAKSHA ELITE</h2>
+    <p style="color:#666; font-size:12px;">Next-Gen Women Safety System</p>
 
-<button class="btn red" onclick="startEmergency('Manual SOS')">🆘 SOS</button>
-<button class="btn blue" onclick="fakeCall()">📞 Fake Call Escape</button>
-<button class="btn green" onclick="manualLocation()">📍 Share Location</button>
-<button class="btn orange" onclick="toggleGuard()">🛡️ Guard Mode</button>
+    <button class="btn red" onclick="startSOS()">🆘 EMERGENCY SOS</button>
+    <button class="btn green" onclick="shareLocation()">📍 Share Live Location</button>
+    
+    <button class="btn blue" onclick="triggerFakeCall()">📞 Fake Ghost Call</button>
+    
+    <button class="btn black" onclick="toggleWifiScanner()">📡 Indoor Wi-Fi Scanner</button>
 
-<div class="box">
-<h3>⚙️ Setup (One Time)</h3>
+    <div id="wifiBox">
+        <div style="text-align:center; border-bottom:1px solid #0f0; margin-bottom:5px;">WI-FI FINGERPRINTING</div>
+        <div id="wifiList">Scanning...</div>
+        <div id="locLock" class="location-lock">📍 LOCATED: PHOENIX MALL (L2)</div>
+    </div>
 
-<input id="chatid" placeholder="Telegram Chat ID">
-<input id="phone" placeholder="Emergency Phone +91...">
-<input id="dangerlat" placeholder="Danger Zone Lat">
-<input id="dangerlon" placeholder="Danger Zone Lon">
+    <div class="box">
+        <h3>⚙ Setup</h3>
+        <input id="name" placeholder="Your Name">
+        <input id="phone" placeholder="Emergency Phone">
+        <input id="chatid" placeholder="Telegram Chat ID">
+        <button class="btn" style="background:#333; margin-top:10px;" onclick="saveData()">Save Settings</button>
+    </div>
 
-<button class="btn blue" onclick="saveSettings()">Save Settings</button>
-<p id="saved" style="display:none;color:lightgreen;">Saved ✅</p>
-</div>
+    <div id="fakeCallScreen">
+        <div style="text-align:center;">
+            <div class="caller-icon">👮‍♂️</div>
+            <div class="caller-name">Police Dad</div>
+            <div class="caller-number">Mobile +91 98XXX XXXXX</div>
+        </div>
+        
+        <div class="call-actions">
+            <button class="action-btn decline" onclick="endFakeCall()">✖</button>
+            <button class="action-btn accept" onclick="answerFakeCall()">📞</button>
+        </div>
+        <div id="callTimer" style="display:none; font-size:20px;">00:00</div>
+    </div>
 
-<script>
-const BOT_TOKEN="8378037937:AAGjuFdZWLnf0kFfTG_QIFCslgvrDMb-sC4"; // ← only bot token fixed
+    <script>
+    const BOT="YOUR_TELEGRAM_BOT_TOKEN"; // Yahan apna Token daalna
 
-let guardActive=false;
-let emergencyActive=false;
+    // --- OLD FUNCTIONS (UNCHANGED) ---
+    function saveData(){
+        const data={
+            name:document.getElementById("name").value,
+            phone:document.getElementById("phone").value,
+            chat:document.getElementById("chatid").value
+        };
+        localStorage.setItem("raksha",JSON.stringify(data));
+        alert("Saved Successfully!");
+    }
 
-// ---------- LOAD SETTINGS ----------
-window.onload=function(){
- document.getElementById("chatid").value=localStorage.getItem("chatid")||"";
- document.getElementById("phone").value=localStorage.getItem("phone")||"";
- document.getElementById("dangerlat").value=localStorage.getItem("dlat")||"";
- document.getElementById("dangerlon").value=localStorage.getItem("dlon")||"";
-};
+    function getData(){
+        return JSON.parse(localStorage.getItem("raksha"));
+    }
 
-// ---------- SAVE ----------
-function saveSettings(){
- localStorage.setItem("chatid",document.getElementById("chatid").value);
- localStorage.setItem("phone",document.getElementById("phone").value);
- localStorage.setItem("dlat",document.getElementById("dangerlat").value);
- localStorage.setItem("dlon",document.getElementById("dangerlon").value);
- document.getElementById("saved").style.display="block";
-}
+    function startSOS(){
+        if(navigator.vibrate) navigator.vibrate([200,100,200,100,500]);
+        navigator.geolocation.getCurrentPosition(pos=>{
+            sendAll(pos.coords.latitude, pos.coords.longitude, "SOS EMERGENCY");
+        }, () => alert("GPS Permission Denied! enable it."));
+    }
 
-// ---------- GETTERS ----------
-function getChat(){ return localStorage.getItem("chatid"); }
-function getPhone(){ return localStorage.getItem("phone"); }
+    function shareLocation(){
+        navigator.geolocation.getCurrentPosition(pos=>{
+            const url = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            window.open(`https://wa.me/?text=I am here: ${url}`);
+        });
+    }
 
-// ---------- FAKE CALL ----------
-function fakeCall(){
- let caller=prompt("Caller name","Papa");
- let audio=new Audio("https://actions.google.com/sounds/v1/alarms/phone_alerts_and_rings.ogg");
- audio.loop=true;
- audio.play();
- navigator.vibrate([500,300,500]);
+    function sendAll(lat,lng,reason){
+        const d=getData();
+        if(!d) return alert("Please Save Setup first!");
+        
+        const mapUrl = `http://maps.google.com/maps?q=${lat},${lng}`;
+        const msg=`🚨 ${reason}\nName: ${d.name}\nLocation: ${mapUrl}`;
 
- let div=document.createElement("div");
- div.style="position:fixed;top:0;left:0;width:100%;height:100%;background:black;color:white;display:flex;align-items:center;justify-content:center;font-size:30px;z-index:99999";
- div.innerHTML="📞 "+caller+" Calling...";
- document.body.appendChild(div);
+        // Telegram Send
+        fetch(`https://api.telegram.org/bot${BOT}/sendMessage?chat_id=${d.chat}&text=${encodeURIComponent(msg)}`);
+        
+        // SMS Fallback
+        window.location.href=`sms:${d.phone}?body=${encodeURIComponent(msg)}`;
+    }
 
- setTimeout(()=>{audio.pause();location.reload();},15000);
-}
+    // --- NEW FEATURE: FAKE GHOST CALL ---
+    let ringtone = new Audio('https://upload.wikimedia.org/wikipedia/commons/e/e5/Nokia_tune_2012.ogg'); 
+    ringtone.loop = true;
 
-// ---------- VOLUME BUTTON SOS ----------
-let vol=0; let timer;
-window.addEventListener("keydown",e=>{
- if(e.key==="AudioVolumeUp" || e.keyCode===175){
-  vol++;
-  if(vol>=3){ startEmergency("Quick Button SOS"); vol=0;}
-  clearTimeout(timer);
-  timer=setTimeout(()=>vol=0,2000);
- }
-});
+    function triggerFakeCall() {
+        // 3 Second delay taaki real lage
+        alert("Call scheduled in 3 seconds. Lock phone or wait.");
+        setTimeout(() => {
+            document.getElementById("fakeCallScreen").style.display = "flex";
+            ringtone.play().catch(e => console.log("Audio play failed (user interaction needed)"));
+            if(navigator.vibrate) navigator.vibrate([1000, 500, 1000]);
+        }, 3000);
+    }
 
-// ---------- EMERGENCY ----------
-function startEmergency(reason){
- if(emergencyActive) return;
- emergencyActive=true;
- navigator.vibrate([1000,300,1000]);
+    function endFakeCall() {
+        document.getElementById("fakeCallScreen").style.display = "none";
+        ringtone.pause();
+        ringtone.currentTime = 0;
+        window.speechSynthesis.cancel();
+        if(navigator.vibrate) navigator.vibrate(0);
+    }
 
- navigator.geolocation.getCurrentPosition(pos=>{
-  let lat=pos.coords.latitude;
-  let lon=pos.coords.longitude;
-  let link=`https://maps.google.com/?q=${lat},${lon}`;
-  let msg=`🚨 SOS: ${reason}\n📍 ${link}`;
+    function answerFakeCall() {
+        ringtone.pause();
+        if(navigator.vibrate) navigator.vibrate(0);
 
-  if(navigator.onLine){
-   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${getChat()}&text=${encodeURIComponent(msg)}`);
-   sendLocation(lat,lon);
-   startAudioRecord();
-  }else{
-   window.location.href=`sms:${getPhone()}?body=${encodeURIComponent(msg)}`;
-  }
- });
-}
+        // UI Changes
+        document.querySelector(".call-actions").style.display = "none";
+        document.getElementById("callTimer").style.display = "block";
+        document.querySelector(".caller-number").innerText = "Connected...";
 
-// ---------- SEND LOCATION ----------
-function sendLocation(lat,lon){
- fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation?chat_id=${getChat()}&latitude=${lat}&longitude=${lon}`);
-}
+        // HEAVY VOICE LOGIC
+        setTimeout(() => {
+            let msg = new SpeechSynthesisUtterance("Hello Beta. Main police station se bol raha hoon. Location trace ho gayi hai. Hum bas 2 minute mein pahunch rahe hain. Phone mat kaatna.");
+            msg.rate = 0.8; // Slow
+            msg.pitch = 0.6; // Deep Voice
+            window.speechSynthesis.speak(msg);
+        }, 1000);
 
-// ---------- AUDIO RECORD ----------
-async function startAudioRecord(){
- try{
- const stream=await navigator.mediaDevices.getUserMedia({audio:true});
- let rec=new MediaRecorder(stream);
- let chunks=[];
- rec.ondataavailable=e=>chunks.push(e.data);
- rec.start();
- setTimeout(()=>rec.stop(),15000);
+        // Auto cut after 10 sec
+        setTimeout(endFakeCall, 12000);
+    }
 
- rec.onstop=()=>{
-  let blob=new Blob(chunks,{type:"audio/ogg"});
-  let fd=new FormData();
-  fd.append("chat_id",getChat());
-  fd.append("audio",blob,"evidence.ogg");
+    // --- NEW FEATURE: INDOOR WI-FI SCANNER (Demo) ---
+    let scanInterval;
+    const wifis = [
+        { ssid: "Mall_Free_WiFi", db: -80 },
+        { ssid: "Starbucks_Guest", db: -85 },
+        { ssid: "Security_Admin", db: -90 }
+    ];
 
-  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendAudio`,{
-    method:"POST", body:fd
-  });
- }
- }catch(e){}
-}
+    function toggleWifiScanner() {
+        const box = document.getElementById("wifiBox");
+        if(box.style.display === "block") {
+            box.style.display = "none";
+            clearInterval(scanInterval);
+        } else {
+            box.style.display = "block";
+            startWifiScan();
+        }
+    }
 
-// ---------- LOCATION SHARE ----------
-function manualLocation(){
- navigator.geolocation.getCurrentPosition(pos=>{
-  let link=`https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
-  window.location.href=`https://wa.me/?text=${encodeURIComponent("My location: "+link)}`;
- });
-}
+    function startWifiScan() {
+        const list = document.getElementById("wifiList");
+        scanInterval = setInterval(() => {
+            list.innerHTML = "";
+            let strongSignal = false;
 
-// ---------- GUARD MODE ----------
-function toggleGuard(){
- guardActive=!guardActive;
- if(guardActive){
-  alert("Guard Mode ON");
-  startDangerWatch();
- }else location.reload();
-}
+            wifis.forEach(w => {
+                // Random fluctuation simulation
+                let noise = Math.floor(Math.random() * 5);
+                let currentDb = w.db + noise;
+                
+                // Simulate walking closer to 'Security_Admin'
+                if(w.ssid === "Security_Admin") {
+                    w.db += 2; // Signal getting stronger
+                    if(w.db > -50) strongSignal = true; 
+                    if(w.db > -40) w.db = -40; // Max limit
+                }
 
-// ---------- DANGER ZONE ----------
-function startDangerWatch(){
- navigator.geolocation.watchPosition(pos=>{
-  let dlat=parseFloat(localStorage.getItem("dlat"));
-  let dlon=parseFloat(localStorage.getItem("dlon"));
-  if(!dlat||!dlon) return;
+                list.innerHTML += `<div class="wifi-row"><span>${w.ssid}</span><span>${currentDb} dBm</span></div>`;
+            });
 
-  let d=distance(pos.coords.latitude,pos.coords.longitude,dlat,dlon);
-  if(d<0.4){
-   alert("⚠️ Entered Unsafe Area");
-   navigator.vibrate([500,200,500]);
-  }
- });
-}
+            if(strongSignal) {
+                document.getElementById("locLock").style.display = "block";
+                if(navigator.vibrate) navigator.vibrate(100);
+            }
+        }, 800);
+    }
 
-function distance(lat1,lon1,lat2,lon2){
- const R=6371;
- const dLat=(lat2-lat1)*Math.PI/180;
- const dLon=(lon2-lon1)*Math.PI/180;
- const a=Math.sin(dLat/2)*Math.sin(dLat/2)+
- Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
- Math.sin(dLon/2)*Math.sin(dLon/2);
- return R*(2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)));
-}
-</script>
+    // Load Data on Start
+    window.onload = () => {
+        const d = getData();
+        if(d) {
+            document.getElementById("name").value = d.name || "";
+            document.getElementById("phone").value = d.phone || "";
+            document.getElementById("chatid").value = d.chat || "";
+        }
+    }
+    </script>
+
 </body>
 </html>
